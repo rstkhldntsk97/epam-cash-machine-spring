@@ -1,5 +1,9 @@
 package com.epam.springcashmachine.repository;
 
-public class ReceiptRepository {
+import com.epam.springcashmachine.model.Receipt;
+
+public interface ReceiptRepository {
+
+    Receipt getReceipt();
 
 }

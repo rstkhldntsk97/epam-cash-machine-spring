@@ -1,5 +1,6 @@
 package com.epam.springcashmachine.repository.impl;
 
+import com.epam.springcashmachine.exception.UserNotFoundException;
 import com.epam.springcashmachine.model.User;
 import com.epam.springcashmachine.repository.UserRepository;
 import org.springframework.stereotype.Component;
@@ -10,26 +11,35 @@ import java.util.List;
 @Component
 public class UserRepositoryImpl implements UserRepository {
 
-    private final List<User> user = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
 
     @Override
     public User getUser(String login) {
-        return null;
+        return users.stream()
+                .filter(user -> user.getUsername().equals(login))
+                .findFirst()
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
     public User createUser(User user) {
-        return null;
+        users.add(user);
+        return user;
     }
 
     @Override
     public User updateUser(String login, User user) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean deleteUser(String login) {
-        return false;
+        return users.removeIf(user -> user.getUsername().equals(login));
+    }
+
+    @Override
+    public List<User> getAll(){
+        return users;
     }
 
 }

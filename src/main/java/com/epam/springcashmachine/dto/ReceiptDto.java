@@ -1,5 +1,7 @@
-package com.epam.springcashmachine.model;
+package com.epam.springcashmachine.dto;
 
+import com.epam.springcashmachine.model.Product;
+import com.epam.springcashmachine.model.User;
 import lombok.Builder;
 import lombok.Data;
 
@@ -8,7 +10,7 @@ import java.util.Map;
 
 @Data
 @Builder
-public class Receipt {
+public class ReceiptDto {
 
     private Integer total;
     private User user;
