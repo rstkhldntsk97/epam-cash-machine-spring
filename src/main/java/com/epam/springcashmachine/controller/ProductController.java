@@ -1,58 +1,65 @@
 package com.epam.springcashmachine.controller;
 
+import com.epam.springcashmachine.api.ProductApi;
+import com.epam.springcashmachine.controller.assembler.ProductAssembler;
+import com.epam.springcashmachine.controller.model.ProductModel;
 import com.epam.springcashmachine.dto.ProductDto;
 import com.epam.springcashmachine.dto.group.OnCreate;
 import com.epam.springcashmachine.dto.group.OnUpdate;
 import com.epam.springcashmachine.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/products")
 @RequiredArgsConstructor
-public class ProductController {
+public class ProductController implements ProductApi {
 
     private final ProductService productService;
+    private final ProductAssembler productAssembler;
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/getProduct/{name}")
-    public ProductDto getProductByName(@PathVariable String name) {
-        return productService.getProductByName(name);
+    @Override
+    public ProductModel getProductByName(String name) {
+        ProductDto productDto = productService.getProductByName(name);
+        return productAssembler.toModel(productDto);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/getProduct/{code}")
-    public ProductDto getProductByCode(@PathVariable Integer code) {
-        return productService.getProductByCode(code);
+    @Override
+    public ProductModel getProductByCode(Integer code) {
+        ProductDto productDto = productService.getProductByCode(code);
+        return productAssembler.toModel(productDto);
     }
 
-    @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/createProduct")
-    public ProductDto createProduct(@RequestBody @Validated(OnCreate.class) ProductDto productDto) {
-        return productService.createProduct(productDto);
+    @Override
+    public ProductModel createProduct(ProductDto productDto) {
+        ProductDto outProductDto = productService.createProduct(productDto);
+        return productAssembler.toModel(outProductDto);
     }
 
-    @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/all")
-    public List<ProductDto> getAll(){
-        return productService.getAll();
+    @Override
+    public ProductModel updateProduct(@RequestBody @Validated(OnUpdate.class) ProductDto productDto){
+        ProductDto outProductDto = productService.updateProduct(productDto);
+        return productAssembler.toModel(outProductDto);
     }
 
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    @DeleteMapping("/delete/{name}")
+    @Override
     public ResponseEntity<Void> deleteProduct(@PathVariable String name){
         productService.deleteProduct(name);
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("/updateProduct")
-    public ProductDto updateProduct(@RequestBody @Validated(OnUpdate.class) ProductDto productDto){
-        return productService.updateProduct(productDto);
+    @Override
+    public List<ProductModel> getAll(){
+        List<ProductDto> productsDto =  productService.getAll();
+        List<ProductModel> products = new ArrayList<>();
+        for (ProductDto p : productsDto) {
+            products.add(productAssembler.toModel(p));
+        }
+        return products;
     }
 
 }

@@ -6,3 +6,14 @@ management:
   endpoint:
     health:
       show-details: always
+
+
+spring:
+  jpa:
+    show-sql: true
+
+#  detailed transaction management logs
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG

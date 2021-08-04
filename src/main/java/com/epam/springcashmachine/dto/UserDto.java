@@ -2,19 +2,18 @@ package com.epam.springcashmachine.dto;
 
 import com.epam.springcashmachine.dto.group.OnCreate;
 import com.epam.springcashmachine.dto.group.OnUpdate;
-import io.swagger.annotations.ApiModelProperty;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
-import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
 @Data
-@Builder
 @JsonInclude(Include.NON_NULL)
+@NoArgsConstructor
 public class UserDto {
 
     @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)

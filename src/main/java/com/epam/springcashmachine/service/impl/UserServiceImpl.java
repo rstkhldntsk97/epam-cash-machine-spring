@@ -82,22 +82,18 @@ public class UserServiceImpl implements UserService {
         return mapUserToUserDto(user);
     }
 
+    @SneakyThrows
     private UserDto mapUserToUserDto(User user) {
-        return UserDto.builder()
-                .username(user.getUsername())
-                .role(user.getRole())
-                .password(user.getPassword())
-                .email(user.getEmail())
-                .build();
+        UserDto userDto = new UserDto();
+        PUB.copyProperties(userDto, user);
+        return userDto;
     }
 
+    @SneakyThrows
     private User mapUserDtoToUser(UserDto userDto) {
-        return User.builder()
-                .role(userDto.getRole())
-                .username(userDto.getUsername())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .build();
+        User user = new User();
+        PUB.copyProperties(user, userDto);
+        return user;
     }
 
 }

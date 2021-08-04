@@ -5,7 +5,9 @@ import com.epam.springcashmachine.model.Product;
 import com.epam.springcashmachine.repository.ProductRepository;
 import com.epam.springcashmachine.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,6 +19,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final PropertyUtilsBean PUB;
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
@@ -63,22 +66,18 @@ public class ProductServiceImpl implements ProductService {
         productRepository.deleteProduct(name);
     }
 
+    @SneakyThrows
     private Product mapProductDtoToProduct(ProductDto productDto) {
-        return Product.builder()
-                .name(productDto.getName())
-                .code(productDto.getCode())
-                .price(productDto.getPrice())
-                .quantity(productDto.getQuantity())
-                .build();
+        Product product = new Product();
+        PUB.copyProperties(product, productDto);
+        return product;
     }
 
+    @SneakyThrows
     private ProductDto mapProductToProductDto(Product product) {
-        return ProductDto.builder()
-                .name(product.getName())
-                .price(product.getPrice())
-                .code(product.getCode())
-                .quantity(product.getQuantity())
-                .build();
+        ProductDto productDto = new ProductDto();
+        PUB.copyProperties(productDto, product);
+        return productDto;
     }
 
 }

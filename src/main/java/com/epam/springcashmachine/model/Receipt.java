@@ -7,7 +7,6 @@ import java.util.Date;
 import java.util.Map;
 
 @Data
-@Builder
 public class Receipt {
 
     private Integer total;

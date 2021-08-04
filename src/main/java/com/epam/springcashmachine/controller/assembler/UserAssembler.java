@@ -17,6 +17,7 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<UserDto, 
     public static final String CREATE_REL = "create_user";
     public static final String UPDATE_USER = "update_user";
     public static final String DELETE_USER = "delete_user";
+    public static final String GET_ALL_USERS = "get_all_users";
 
     public UserAssembler() {
         super(UserController.class, UserModel.class);
@@ -28,12 +29,11 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<UserDto, 
 
         Link get = linkTo(methodOn(UserController.class).getUser(entity.getUsername())).withRel(GET_REL);
         Link create = linkTo(methodOn(UserController.class).createUser(entity)).withRel(CREATE_REL);
-        Link update = linkTo(methodOn(UserController.class).updateUser(entity.getUsername(), entity))
-                .withRel(UPDATE_USER);
-        Link delete = linkTo(methodOn(UserController.class).deleteUser(entity.getUsername()))
-                .withRel(DELETE_USER);
+        Link update = linkTo(methodOn(UserController.class).updateUser(entity.getUsername(), entity)).withRel(UPDATE_USER);
+        Link delete = linkTo(methodOn(UserController.class).deleteUser(entity.getUsername())).withRel(DELETE_USER);
+        Link getAll = linkTo(methodOn(UserController.class).getAll()).withRel(GET_ALL_USERS);
 
-        userModel.add(get, create, update, delete);
+        userModel.add(get, create, update, delete, getAll);
 
         return userModel;
     }
