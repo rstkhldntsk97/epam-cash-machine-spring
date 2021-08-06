@@ -25,11 +25,11 @@ public interface ProductApi {
     @GetMapping("/getProductByName/{name}")
     ProductModel getProductByName(@PathVariable String name);
 
-    @ApiImplicitParams({@ApiImplicitParam(name = "code", paramType = "path", required = true, value = "Product code")})
-    @ApiOperation("Get product by code")
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Product id")})
+    @ApiOperation("Get product by id")
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping("/getProductByCode/{code}")
-    ProductModel getProductByCode(@PathVariable Integer code);
+    @GetMapping("/getProductById/{id}")
+    ProductModel getProductById(@PathVariable Long id);
 
     @ApiOperation("Create product")
     @ResponseStatus(HttpStatus.CREATED)

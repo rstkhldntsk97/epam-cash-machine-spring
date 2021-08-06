@@ -13,7 +13,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @Component
 public class ProductAssembler extends RepresentationModelAssemblerSupport<ProductDto, ProductModel> {
 
-    public static final String GET_BY_CODE = "get_product_by_code";
+    public static final String GET_PRODUCT_BY_ID = "get_product_by_id";
     public static final String GET_BY_NAME = "get_product_by_name";
     public static final String CREATE_PRODUCT = "create_product";
     public static final String UPDATE_PRODUCT = "update_product";
@@ -28,7 +28,7 @@ public class ProductAssembler extends RepresentationModelAssemblerSupport<Produc
     public ProductModel toModel(ProductDto entity) {
         ProductModel productModel = new ProductModel(entity);
 
-        Link getByCode = linkTo(methodOn(ProductController.class).getProductByCode(entity.getCode())).withRel(GET_BY_CODE);
+        Link getByCode = linkTo(methodOn(ProductController.class).getProductById(entity.getId())).withRel(GET_PRODUCT_BY_ID);
         Link getByName = linkTo(methodOn(ProductController.class).getProductByName(entity.getName())).withRel(GET_BY_NAME);
         Link create = linkTo(methodOn(ProductController.class).createProduct(entity)).withRel(CREATE_PRODUCT);
         Link update = linkTo(methodOn(ProductController.class).updateProduct(entity)).withRel(UPDATE_PRODUCT);

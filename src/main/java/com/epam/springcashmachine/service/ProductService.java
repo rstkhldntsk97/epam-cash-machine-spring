@@ -10,7 +10,7 @@ public interface ProductService {
 
     ProductDto getProductByName(String name);
 
-    ProductDto getProductByCode(Integer code);
+    ProductDto getProductById(Long id);
 
     List<ProductDto> getAll();
 

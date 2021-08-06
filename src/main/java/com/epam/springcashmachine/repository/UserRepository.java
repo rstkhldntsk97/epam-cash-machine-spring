@@ -1,19 +1,17 @@
 package com.epam.springcashmachine.repository;
 
 import com.epam.springcashmachine.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
-public interface UserRepository {
 
-    User getUser(String login);
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
 
-    User createUser(User user);
+    boolean existsByUsername(String username);
 
-    User updateUser(String login, User user);
-
-    boolean deleteUser(String login);
-
-    public List<User> getAll();
+    Optional<User> findByUsername(String username);
 
 }

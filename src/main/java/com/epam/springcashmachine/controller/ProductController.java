@@ -29,8 +29,8 @@ public class ProductController implements ProductApi {
     }
 
     @Override
-    public ProductModel getProductByCode(Integer code) {
-        ProductDto productDto = productService.getProductByCode(code);
+    public ProductModel getProductById(Long id) {
+        ProductDto productDto = productService.getProductById(id);
         return productAssembler.toModel(productDto);
     }
 

@@ -1,13 +1,15 @@
 package com.epam.springcashmachine.service.impl;
 
 import com.epam.springcashmachine.dto.UserDto;
+import com.epam.springcashmachine.exception.UserAlreadyExistsException;
+import com.epam.springcashmachine.exception.UserNotFoundException;
 import com.epam.springcashmachine.model.User;
 import com.epam.springcashmachine.repository.UserRepository;
+import com.epam.springcashmachine.service.MappingService;
 import com.epam.springcashmachine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,35 +21,33 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final PropertyUtilsBean PUB;
+    private final MappingService mappingService;
 
     @Override
     public UserDto getUser(String login) {
-        User user = userRepository.getUser(login);
+        User user = userRepository.findByUsername(login).orElseThrow(UserNotFoundException::new);
         log.info("getUser by email {}", login);
-        return mapUserToUserDto(user);
+        return mappingService.mapUserToUserDto(user);
     }
 
 
     @SneakyThrows
     @Override
     public UserDto createUser(UserDto userDto) {
-        if (!userDto.getPassword().equals(userDto.getRepeatPassword())){
-            throw new RuntimeException("repeatPassword should be equals to password");
+        if (userRepository.existsByUsername(userDto.getUsername())) {
+            throw new UserAlreadyExistsException();
         }
-        User user1 = new User();
-        PUB.copyProperties(user1, userDto);
-        User user = mapUserDtoToUser(userDto);
-        user = userRepository.createUser(user);
+        User user = mappingService.mapUserDtoToUser(userDto);
+        user = userRepository.save(user);
         log.info("createUser by login {}", userDto.getUsername());
-        return mapUserToUserDto(user);
+        return mappingService.mapUserToUserDto(user);
     }
 
     @Override
     public List<UserDto> getAll() {
         List<UserDto> users = new ArrayList<>();
-        for (User user : userRepository.getAll()) {
-            users.add(mapUserToUserDto(user));
+        for (User user : userRepository.findAll()) {
+            users.add(mappingService.mapUserToUserDto(user));
         }
         log.info("getAll users");
         return users;
@@ -55,45 +55,29 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto login(String username, String password) {
-        User user = userRepository.getUser(username);
-        if(user.getPassword().equals(password)) {
+        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        if (user.getPassword().equals(password)) {
             log.info("user with username {} was successfully logged in", username);
-            return mapUserToUserDto(user);
+            return mappingService.mapUserToUserDto(user);
         }
-        throw new RuntimeException("cannot username");
+        throw new RuntimeException("cannot find user");
     }
 
     @Override
     public void deleteUser(String login) {
-        userRepository.deleteUser(login);
+        User user = userRepository.findByUsername(login).orElseThrow(UserNotFoundException::new);
+        userRepository.delete(user);
         log.info("deleteUser by username {}", login);
     }
 
     @Override
-    public UserDto updateUser(String email, UserDto userDto) {
-        log.info("updateUser with email {}", email);
-        User user = mapUserDtoToUser(userDto);
-
-        User oldUser = userRepository.getUser(email);
-        user.setEmail(oldUser.getEmail());
-        user.setPassword(oldUser.getPassword());
-
-        user = userRepository.updateUser(email, user);
-        return mapUserToUserDto(user);
-    }
-
-    @SneakyThrows
-    private UserDto mapUserToUserDto(User user) {
-        UserDto userDto = new UserDto();
-        PUB.copyProperties(userDto, user);
-        return userDto;
-    }
-
-    @SneakyThrows
-    private User mapUserDtoToUser(UserDto userDto) {
-        User user = new User();
-        PUB.copyProperties(user, userDto);
-        return user;
+    public UserDto updateUser(String username, UserDto userDto) {
+        log.info("updateUser with username {}", username);
+        User persistedUser = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
+        persistedUser = mappingService.populateUserWithPresentUserDtoFields(persistedUser, userDto);
+        User storedUser = userRepository.save(persistedUser);
+        log.info("User with username {} username was successfully updated", storedUser.getUsername());
+        return mappingService.mapUserToUserDto(persistedUser);
     }
 
 }

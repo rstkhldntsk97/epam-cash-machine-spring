@@ -16,7 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ReceiptController implements ReceiptApi {
 
-    private final ReceiptService receiptService;
+//    private final ReceiptService receiptService;
     private final ReceiptAssembler receiptAssembler;
 
     @Override

@@ -24,7 +24,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto createProduct(ProductDto productDto) {
         Product product = mapProductDtoToProduct(productDto);
-        product = productRepository.createProduct(product);
+        product = productRepository.save(product);
         return mapProductToProductDto(product);
     }
 
@@ -36,16 +36,16 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public ProductDto getProductByCode(Integer code) {
-        log.info("getProduct by code {}", code);
-        Product product = productRepository.getProductByCode(code);
+    public ProductDto getProductById(Long id) {
+        log.info("getProduct by id {}", id);
+        Product product = productRepository.getById(id);
         return mapProductToProductDto(product);
     }
 
     @Override
     public List<ProductDto> getAll() {
         List<ProductDto> products = new ArrayList<>();
-        List<Product> productsRep = productRepository.getAll();
+        List<Product> productsRep = productRepository.findAll();
         for (Product p:productsRep) {
             products.add(mapProductToProductDto(p));
         }
@@ -56,14 +56,15 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto updateProduct(ProductDto productDto) {
         log.info("product quantity by name {} was successfully updated", productDto.getName());
         Product product = mapProductDtoToProduct(productDto);
-        product = productRepository.updateProduct(product);
+        product = productRepository.save(product);
         return mapProductToProductDto(product);
     }
 
     @Override
     public void deleteProduct(String name) {
         log.info("deleteProduct by name {}" , name);
-        productRepository.deleteProduct(name);
+        Product product = productRepository.getProductByName(name);
+        productRepository.delete(product);
     }
 
     @SneakyThrows

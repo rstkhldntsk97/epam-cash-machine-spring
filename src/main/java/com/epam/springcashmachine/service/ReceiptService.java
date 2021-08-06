@@ -1,5 +1,5 @@
 package com.epam.springcashmachine.service;
 
-public interface ReceiptService {
+public interface ReceiptService{
 
 }

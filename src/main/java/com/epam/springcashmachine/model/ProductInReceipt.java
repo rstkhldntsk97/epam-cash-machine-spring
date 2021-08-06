@@ -1,6 +1,6 @@
 package com.epam.springcashmachine.model;
 
-import com.epam.springcashmachine.model.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,17 +9,21 @@ import javax.persistence.*;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class User {
+@NoArgsConstructor
+public class ProductInReceipt {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Enumerated(value = EnumType.STRING)
-    private Role role;
-    @Column(nullable = false, unique = true)
-    private String username;
-    private String password;
+
+    @OneToOne
+    private Product product;
+
+    private Long quantity;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.LAZY)
+    private Receipt receipt;
 
 }

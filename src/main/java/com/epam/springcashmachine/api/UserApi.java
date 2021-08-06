@@ -34,7 +34,7 @@ public interface UserApi {
     @ApiImplicitParams({@ApiImplicitParam(name = "username", paramType = "path", required = true, value = "Username")})
     @ApiOperation("Update user")
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping( "/update/{username}")
+    @PatchMapping( "/update/{username}")
     UserModel updateUser(@PathVariable String username, @Validated(OnUpdate.class) @RequestBody UserDto userDto);
 
     @ApiImplicitParams({@ApiImplicitParam(name = "username", paramType = "path", required = true, value = "Username")})
@@ -46,5 +46,7 @@ public interface UserApi {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/all")
     List<UserModel> getAll();
+
+
 
 }

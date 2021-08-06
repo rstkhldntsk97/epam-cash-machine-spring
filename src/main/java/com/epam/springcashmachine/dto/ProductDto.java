@@ -15,17 +15,17 @@ public class ProductDto {
 
     @Min(0)
     @Max(9999)
-    @NotBlank(message = "'product code' shouldn't be empty", groups = OnCreate.class)
-    private Integer code;
+    @NotBlank(message = "'product id' shouldn't be empty", groups = OnCreate.class)
+    private Long id;
 
     @Min(0)
     @Max(9999)
     @NotBlank(message = "'price' shouldn't be empty", groups = OnCreate.class)
-    private Integer price;
+    private Long price;
 
     @Min(0)
     @Max(9999)
     @NotBlank(message = "'quantity' shouldn't be empty", groups = OnCreate.class)
-    private Integer quantity;
+    private Long quantity;
 
 }
