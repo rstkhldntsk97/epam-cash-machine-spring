@@ -31,7 +31,7 @@ public class ProductAssembler extends RepresentationModelAssemblerSupport<Produc
         Link getByCode = linkTo(methodOn(ProductController.class).getProductById(entity.getId())).withRel(GET_PRODUCT_BY_ID);
         Link getByName = linkTo(methodOn(ProductController.class).getProductByName(entity.getName())).withRel(GET_BY_NAME);
         Link create = linkTo(methodOn(ProductController.class).createProduct(entity)).withRel(CREATE_PRODUCT);
-        Link update = linkTo(methodOn(ProductController.class).updateProduct(entity)).withRel(UPDATE_PRODUCT);
+        Link update = linkTo(methodOn(ProductController.class).updateProduct(entity.getName(), entity)).withRel(UPDATE_PRODUCT);
         Link delete = linkTo(methodOn(ProductController.class).deleteProduct(entity.getName())).withRel(DELETE_PRODUCT);
         Link getAll = linkTo(methodOn(ProductController.class).getAll()).withRel(GET_ALL_PRODUCTS);
 

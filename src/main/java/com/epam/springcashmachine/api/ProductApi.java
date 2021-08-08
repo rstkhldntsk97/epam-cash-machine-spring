@@ -35,13 +35,13 @@ public interface ProductApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createProduct")
 //    ProductModel createProduct(@Validated(OnCreate.class) @RequestBody ProductDto productDto);
-    ProductModel createProduct(@Valid @RequestBody ProductDto productDto);
+    ProductModel createProduct(@RequestBody ProductDto productDto);
 
 
     @ApiOperation("Update product")
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/updateProduct/")
-    ProductModel updateProduct(@RequestBody @Valid ProductDto productDto);
+    @PatchMapping("/updateProduct/{name}")
+    ProductModel updateProduct(@PathVariable String name, @RequestBody @Valid ProductDto productDto);
 
     @ApiOperation("Delete product")
     @ResponseStatus(HttpStatus.ACCEPTED)

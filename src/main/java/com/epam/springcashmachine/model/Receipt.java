@@ -1,6 +1,5 @@
 package com.epam.springcashmachine.model;
 
-import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.model.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Map;
-import java.util.Set;
 
 @Entity
 @Data
@@ -29,8 +27,10 @@ public class Receipt {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @OneToMany
-    @JoinTable()
-    private Set<ProductInReceipt> products;
+    @ElementCollection
+    @CollectionTable(name = "receipt_has_product", joinColumns = @JoinColumn(name = "receipt_id"))
+    @Column(name = "product_amount")
+    @MapKeyJoinColumn(name = "product_id")
+    private Map<Product, Integer> products;
 
 }

@@ -1,5 +1,5 @@
 SET
-GLOBAL TIME_ZONE = "+3:00"; 
+GLOBAL TIME_ZONE = "+3:00";
 DROP
 DATABASE IF EXISTS `cash_machine`;
 CREATE
@@ -48,13 +48,13 @@ CREATE TABLE receipt
     FOREIGN KEY (user_id) REFERENCES user (id)
 );
 
-CREATE TABLE product_in_receipt
+CREATE TABLE receipt_has_product
 (
-    `id`                  BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
-    `receipt_id`          BIGINT NOT NULL,
-    `product_id`          BIGINT NOT NULL,
-    `quantity_in_receipt` BIGINT DEFAULT (1),
-    `price`               BIGINT NOT NULL,
+    `id`             BIGINT NOT NULL AUTO_INCREMENT UNIQUE PRIMARY KEY,
+    `receipt_id`     BIGINT NOT NULL,
+    `product_id`     BIGINT NOT NULL,
+    `product_amount` BIGINT DEFAULT (1),
+    `price`          BIGINT NOT NULL,
     FOREIGN KEY (receipt_id) REFERENCES receipt (id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES product (id),
     UNIQUE (receipt_id, product_id)
@@ -74,7 +74,7 @@ VALUES (1),
        (2),
        (2);
 
-INSERT INTO product_in_receipt (receipt_id, product_id, quantity_in_receipt, price)
+INSERT INTO receipt_has_product (receipt_id, product_id, product_amount, price)
 VALUES (1, 1, 1, 100),
        (1, 2, 2, 400),
        (2, 3, 1, 300),
@@ -86,26 +86,26 @@ VALUES (1, 1, 1, 100),
        (5, 9, 11, 9900);
 
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 1),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 1),
     status      = 'CLOSED'
 WHERE receipt.id = 1;
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 2),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 2),
     status      = 'CLOSED'
 WHERE receipt.id = 2;
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 3),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 3),
     status      = 'CLOSED'
 WHERE receipt.id = 3;
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 4),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 4),
     status      = 'CLOSED'
 WHERE receipt.id = 4;
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 5),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 5),
     status      = 'CLOSED'
 WHERE receipt.id = 5;
 UPDATE receipt
-SET total_price = (SELECT SUM(price) FROM product_in_receipt WHERE receipt_id = 6),
+SET total_price = (SELECT SUM(price) FROM receipt_has_product WHERE receipt_id = 6),
     status      = 'CLOSED'
 WHERE receipt.id = 6;

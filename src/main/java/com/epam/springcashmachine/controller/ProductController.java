@@ -41,13 +41,13 @@ public class ProductController implements ProductApi {
     }
 
     @Override
-    public ProductModel updateProduct(@RequestBody @Validated(OnUpdate.class) ProductDto productDto){
-        ProductDto outProductDto = productService.updateProduct(productDto);
+    public ProductModel updateProduct(String name, ProductDto productDto){
+        ProductDto outProductDto = productService.updateProduct(name, productDto);
         return productAssembler.toModel(outProductDto);
     }
 
     @Override
-    public ResponseEntity<Void> deleteProduct(@PathVariable String name){
+    public ResponseEntity<Void> deleteProduct(String name){
         productService.deleteProduct(name);
         return ResponseEntity.noContent().build();
     }

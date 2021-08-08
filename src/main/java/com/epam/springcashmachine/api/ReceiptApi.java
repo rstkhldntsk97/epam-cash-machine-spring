@@ -21,8 +21,8 @@ public interface ReceiptApi {
 
     @ApiOperation("Update receipt")
     @ResponseStatus(HttpStatus.OK)
-    @PutMapping("/updateReceipt/")
-    ReceiptModel updateReceipt(@RequestBody ReceiptDto receiptDto);
+    @PatchMapping("/updateReceipt/{id}")
+    ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody ReceiptDto receiptDto);
 
     @ApiOperation("Delete receipt")
     @ResponseStatus(HttpStatus.OK)
@@ -37,7 +37,7 @@ public interface ReceiptApi {
     @ApiOperation("Add product to receipt")
     @ResponseStatus(HttpStatus.OK)
     @PostMapping("/addProduct")
-    ReceiptModel addProductToReceipt(Integer productCode, Integer quantity,ReceiptDto receiptDto);
+    ReceiptModel addProductToReceipt(Long productCode, Long quantity, ReceiptDto receiptDto);
 
     @ApiOperation("Delete product from receipt")
     @ResponseStatus(HttpStatus.OK)

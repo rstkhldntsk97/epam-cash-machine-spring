@@ -17,14 +17,16 @@ import javax.validation.constraints.Null;
 @NoArgsConstructor
 public class UserDto {
 
-//    @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)
+    private Long id;
+
+    @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)
     private Role role;
 
-//    @NotBlank(message = "'username' shouldn't be empty", groups = OnCreate.class)
+    @NotBlank(message = "'username' shouldn't be empty", groups = OnCreate.class)
     private String username;
 
     @Null(message = "'password' should be absent in request", groups = OnUpdate.class)
-//    @NotBlank(message = "'password' shouldn't be empty", groups = OnCreate.class)
+    @NotBlank(message = "'password' shouldn't be empty", groups = OnCreate.class)
     private String password;
 
 }

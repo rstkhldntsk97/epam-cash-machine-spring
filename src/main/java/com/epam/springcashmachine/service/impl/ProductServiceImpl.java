@@ -1,13 +1,13 @@
 package com.epam.springcashmachine.service.impl;
 
 import com.epam.springcashmachine.dto.ProductDto;
+import com.epam.springcashmachine.exception.ProductNotFoundException;
 import com.epam.springcashmachine.model.Product;
 import com.epam.springcashmachine.repository.ProductRepository;
+import com.epam.springcashmachine.service.MappingService;
 import com.epam.springcashmachine.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,27 +19,27 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final PropertyUtilsBean PUB;
+    private final MappingService mappingService;
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
-        Product product = mapProductDtoToProduct(productDto);
+        Product product = mappingService.mapProductDtoToProduct(productDto);
         product = productRepository.save(product);
-        return mapProductToProductDto(product);
+        return mappingService.mapProductToProductDto(product);
     }
 
     @Override
     public ProductDto getProductByName(String name) {
         log.info("getProduct by name {}", name);
-        Product product = productRepository.getProductByName(name);
-        return mapProductToProductDto(product);
+        Product product = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
+        return mappingService.mapProductToProductDto(product);
     }
 
     @Override
     public ProductDto getProductById(Long id) {
         log.info("getProduct by id {}", id);
         Product product = productRepository.getById(id);
-        return mapProductToProductDto(product);
+        return mappingService.mapProductToProductDto(product);
     }
 
     @Override
@@ -47,38 +47,27 @@ public class ProductServiceImpl implements ProductService {
         List<ProductDto> products = new ArrayList<>();
         List<Product> productsRep = productRepository.findAll();
         for (Product p:productsRep) {
-            products.add(mapProductToProductDto(p));
+            products.add(mappingService.mapProductToProductDto(p));
         }
         return products;
     }
 
     @Override
-    public ProductDto updateProduct(ProductDto productDto) {
-        log.info("product quantity by name {} was successfully updated", productDto.getName());
-        Product product = mapProductDtoToProduct(productDto);
-        product = productRepository.save(product);
-        return mapProductToProductDto(product);
+    public ProductDto updateProduct(String name, ProductDto productDto) {
+        Product persistedProduct = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
+        persistedProduct = mappingService.populateProductWithPresentProductDtoFields(persistedProduct, productDto);
+        Product storedProduct = productRepository.save(persistedProduct);
+        log.info("product quantity by name {} was successfully updated", storedProduct.getName());
+        return mappingService.mapProductToProductDto(persistedProduct);
     }
 
     @Override
     public void deleteProduct(String name) {
         log.info("deleteProduct by name {}" , name);
-        Product product = productRepository.getProductByName(name);
+        Product product = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
         productRepository.delete(product);
     }
 
-    @SneakyThrows
-    private Product mapProductDtoToProduct(ProductDto productDto) {
-        Product product = new Product();
-        PUB.copyProperties(product, productDto);
-        return product;
-    }
 
-    @SneakyThrows
-    private ProductDto mapProductToProductDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        PUB.copyProperties(productDto, product);
-        return productDto;
-    }
 
 }
