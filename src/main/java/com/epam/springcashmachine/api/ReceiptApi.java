@@ -4,6 +4,8 @@ import com.epam.springcashmachine.controller.model.ReceiptModel;
 import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.dto.ReceiptDto;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +16,12 @@ import java.util.List;
 @Api(tags = "Receipt management API")
 @RequestMapping("api/v1/receipts")
 public interface ReceiptApi {
+
+    @ApiImplicitParams({@ApiImplicitParam(name = "id", paramType = "path", required = true, value = "Receipt id")})
+    @ApiOperation("Get receipt by id")
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/getReceiptById/{id}")
+    ReceiptModel getReceipt(@PathVariable Long id);
 
     @ApiOperation("Create receipt")
     @ResponseStatus(HttpStatus.CREATED)
@@ -27,7 +35,7 @@ public interface ReceiptApi {
 
     @ApiOperation("Delete receipt")
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/delete/{id}")
+    @PatchMapping("/delete/{id}")
     ResponseEntity<Void> deleteReceipt(@PathVariable Long id);
 
     @ApiOperation("Get all receipts")

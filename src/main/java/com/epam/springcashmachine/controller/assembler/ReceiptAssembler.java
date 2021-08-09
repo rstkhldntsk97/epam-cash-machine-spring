@@ -28,15 +28,13 @@ public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receip
     public ReceiptModel toModel(ReceiptDto entity) {
         ReceiptModel receiptModel = new ReceiptModel(entity);
 
-//        Link get = linkTo(methodOn(ReceiptController.class).getReceipt(entity.getUsername())).withRel(GET_RECEIPT);
+        Link get = linkTo(methodOn(ReceiptController.class).getReceipt(entity.getId())).withRel(GET_RECEIPT);
         Link create = linkTo(methodOn(ReceiptController.class).createReceipt(entity)).withRel(CREATE_RECEIPT);
         Link update = linkTo(methodOn(ReceiptController.class).updateReceipt(entity.getId(), entity)).withRel(UPDATE_RECEIPT);
-//        Link delete = linkTo(methodOn(ReceiptController.class).deleteReceipt(entity.getId)).withRel(DELETE_RECEIPT);
+        Link delete = linkTo(methodOn(ReceiptController.class).deleteReceipt(entity.getId())).withRel(DELETE_RECEIPT);
         Link getAll = linkTo(methodOn(ReceiptController.class).getAllReceipts()).withRel(GET_ALL_RECEIPTS);
-//        Link addProduct = linkTo(methodOn(ReceiptController.class).addProductToReceipt()).withRel(GET_ALL_RECEIPTS);
-//        Link deleteProduct = linkTo(methodOn(ReceiptController.class).deleteProductFromReceipt()).withRel(GET_ALL_RECEIPTS);
 
-        receiptModel.add( create, update, getAll);
+        receiptModel.add(get, create, update,delete, getAll);
 
         return receiptModel;
     }

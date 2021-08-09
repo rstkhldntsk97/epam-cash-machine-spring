@@ -20,11 +20,15 @@ public class ReceiptController implements ReceiptApi {
 
     private final ReceiptService receiptService;
     private final ReceiptAssembler receiptAssembler;
-    private final ProductService productService;
+
+    @Override
+    public ReceiptModel getReceipt(Long id) {
+        return receiptAssembler.toModel(receiptService.getById(id));
+    }
 
     @Override
     public ReceiptModel createReceipt(ReceiptDto receiptDto) {
-        return null;
+        return receiptAssembler.toModel(receiptService.createReceipt(receiptDto));
     }
 
     @Override
@@ -35,7 +39,8 @@ public class ReceiptController implements ReceiptApi {
 
     @Override
     public ResponseEntity<Void> deleteReceipt(Long id) {
-        return null;
+        receiptService.deleteReceipt(id);
+        return ResponseEntity.noContent().build();
     }
 
     @Override
