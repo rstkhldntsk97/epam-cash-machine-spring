@@ -1,6 +1,7 @@
 package com.epam.springcashmachine.api;
 
 import com.epam.springcashmachine.controller.model.ReceiptModel;
+import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.dto.ReceiptDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +28,7 @@ public interface ReceiptApi {
     @ApiOperation("Delete receipt")
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/{id}")
-    ResponseEntity<Void> deleteReceipt(@PathVariable Integer id);
+    ResponseEntity<Void> deleteReceipt(@PathVariable Long id);
 
     @ApiOperation("Get all receipts")
     @ResponseStatus(HttpStatus.OK)
@@ -36,8 +37,8 @@ public interface ReceiptApi {
 
     @ApiOperation("Add product to receipt")
     @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/addProduct")
-    ReceiptModel addProductToReceipt(Long productCode, Long quantity, ReceiptDto receiptDto);
+    @PatchMapping("/addProduct/{receiptId}")
+    ReceiptModel addProductToReceipt(@PathVariable Long receiptId, @RequestBody ProductInReceiptDto productInReceiptDto);
 
     @ApiOperation("Delete product from receipt")
     @ResponseStatus(HttpStatus.OK)

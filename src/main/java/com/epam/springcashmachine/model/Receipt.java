@@ -18,7 +18,7 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Integer total;
+    private Long total;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -31,6 +31,6 @@ public class Receipt {
     @CollectionTable(name = "receipt_has_product", joinColumns = @JoinColumn(name = "receipt_id"))
     @Column(name = "product_amount")
     @MapKeyJoinColumn(name = "product_id")
-    private Map<Product, Integer> products;
+    private Map<Product, Long> products;
 
 }

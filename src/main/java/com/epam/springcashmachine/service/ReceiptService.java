@@ -1,5 +1,6 @@
 package com.epam.springcashmachine.service;
 
+import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.dto.ReceiptDto;
 
 import java.util.List;
@@ -10,6 +11,7 @@ public interface ReceiptService{
 
     ReceiptDto updateReceipt(Long id, ReceiptDto receiptDto);
 
-    ReceiptDto addProductToReceipt(Long productId, Long quantity, ReceiptDto receiptDto);
+    ReceiptDto addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId);
+
 
 }

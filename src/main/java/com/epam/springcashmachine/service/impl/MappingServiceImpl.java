@@ -67,7 +67,7 @@ public class MappingServiceImpl implements MappingService {
 
     @Override
     public Product populateProductWithPresentProductDtoFields(Product product, ProductDto productDto) {
-        if (Objects.nonNull(productDto.getQuantity())){
+        if (Objects.nonNull(product.getQuantity())){
             product.setQuantity(productDto.getQuantity());
         }
         return product; 

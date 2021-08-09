@@ -57,7 +57,7 @@ public class ProductServiceImpl implements ProductService {
         Product persistedProduct = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
         persistedProduct = mappingService.populateProductWithPresentProductDtoFields(persistedProduct, productDto);
         Product storedProduct = productRepository.save(persistedProduct);
-        log.info("product quantity by name {} was successfully updated", storedProduct.getName());
+        log.info("quantity of product with name {} was successfully updated", storedProduct.getName());
         return mappingService.mapProductToProductDto(persistedProduct);
     }
 

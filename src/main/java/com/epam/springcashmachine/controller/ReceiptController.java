@@ -3,6 +3,7 @@ package com.epam.springcashmachine.controller;
 import com.epam.springcashmachine.api.ReceiptApi;
 import com.epam.springcashmachine.controller.assembler.ReceiptAssembler;
 import com.epam.springcashmachine.controller.model.ReceiptModel;
+import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.dto.ReceiptDto;
 import com.epam.springcashmachine.service.ProductService;
 import com.epam.springcashmachine.service.ReceiptService;
@@ -33,7 +34,7 @@ public class ReceiptController implements ReceiptApi {
     }
 
     @Override
-    public ResponseEntity<Void> deleteReceipt(Integer id) {
+    public ResponseEntity<Void> deleteReceipt(Long id) {
         return null;
     }
 
@@ -48,9 +49,8 @@ public class ReceiptController implements ReceiptApi {
     }
 
     @Override
-    public ReceiptModel addProductToReceipt(Long productCode, Long quantity, ReceiptDto receiptDto) {
-        receiptService.addProductToReceipt(productCode, quantity, receiptDto);
-        return null;
+    public ReceiptModel addProductToReceipt(Long receiptId, ProductInReceiptDto productInReceiptDto) {
+        return receiptAssembler.toModel(receiptService.addProductToReceipt(productInReceiptDto, receiptId));
     }
 
     @Override

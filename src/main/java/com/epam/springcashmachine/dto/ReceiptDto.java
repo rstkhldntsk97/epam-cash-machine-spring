@@ -15,9 +15,9 @@ import java.util.Set;
 public class ReceiptDto {
 
     private Long id;
-    private Integer total;
+    private Long total;
     private User user;
     private Status status;
-    private Map<Product, Integer> products;
+    private Map<Product, Long> products;
 
 }

@@ -1,15 +1,19 @@
 package com.epam.springcashmachine.service.impl;
 
+import com.epam.springcashmachine.dto.ProductInReceiptDto;
 import com.epam.springcashmachine.dto.ReceiptDto;
+import com.epam.springcashmachine.model.Product;
 import com.epam.springcashmachine.model.Receipt;
 import com.epam.springcashmachine.repository.ProductRepository;
 import com.epam.springcashmachine.repository.ReceiptRepository;
 import com.epam.springcashmachine.service.MappingService;
+import com.epam.springcashmachine.service.ProductService;
 import com.epam.springcashmachine.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +24,7 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     private final ReceiptRepository receiptRepository;
     private final MappingService mappingService;
+    private final ProductService productService;
     private final ProductRepository productRepository;
 
     @Override
@@ -36,19 +41,30 @@ public class ReceiptServiceImpl implements ReceiptService {
     public ReceiptDto updateReceipt(Long id, ReceiptDto receiptDto) {
         Receipt persistedReceipt = receiptRepository.getById(id);
         persistedReceipt = mappingService.populateReceiptWithPresentReceiptFields(persistedReceipt, receiptDto);
-        Receipt storedReceipt = receiptRepository.save(persistedReceipt);
+        receiptRepository.save(persistedReceipt);
+        log.info("Receipt with id {} was successfully updated", id);
         return mappingService.mapReceiptToReceiptDro(persistedReceipt);
     }
 
     @Override
-    public ReceiptDto addProductToReceipt(Long productId, Long quantity, ReceiptDto receiptDto) {
-//        Product product = productRepository.getById(productId);
-//        ProductInReceipt productInReceipt = new ProductInReceipt();
-//        productInReceipt.setProduct(product);
-//        productInReceipt.setQuantity(quantity);
-//        productInReceipt.setReceipt(mappingService.mapReceiptDtoToReceipt(receiptDto));
-//        receiptRepository.addProductToReceipt(productInReceipt);
-        return null;
+    @Transactional
+    public ReceiptDto addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId) {
+        Receipt persistedReceipt = receiptRepository.getById(receiptId);
+        Long productId = productInReceiptDto.getProductId();
+        Product product = productRepository.getById(productId);
+        persistedReceipt.getProducts().put(product, productInReceiptDto.getAmount());
+        persistedReceipt.setTotal(countTotalForReceipt(persistedReceipt));
+        product.setQuantity(product.getQuantity() - productInReceiptDto.getAmount());
+        productService.updateProduct(product.getName(),mappingService.mapProductToProductDto(product));
+        return updateReceipt(persistedReceipt.getId(), mappingService.mapReceiptToReceiptDro(persistedReceipt));
+    }
+
+    public Long countTotalForReceipt(Receipt receipt) {
+        return receipt.getProducts()
+                .entrySet()
+                .stream()
+                .mapToLong(p -> p.getKey().getPrice() * p.getValue())
+                .sum();
     }
 
 }
