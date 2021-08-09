@@ -9,16 +9,16 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
-@ComponentScan("com.epam.springcashmachine")
+//@ComponentScan("com.epam.springcashmachine")
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/api/v1/**").permitAll();
-        http.csrf().disable();
     }
 
 }
