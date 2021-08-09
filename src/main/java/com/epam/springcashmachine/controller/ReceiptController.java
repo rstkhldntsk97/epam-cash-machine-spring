@@ -9,6 +9,8 @@ import com.epam.springcashmachine.service.ProductService;
 import com.epam.springcashmachine.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -59,8 +61,8 @@ public class ReceiptController implements ReceiptApi {
     }
 
     @Override
-    public ReceiptModel deleteProductFromReceipt(Integer productCode, ReceiptDto receiptDto) {
-        return null;
+    public ReceiptModel deleteProductFromReceipt(Long receiptId, Long productId) {
+        return receiptAssembler.toModel(receiptService.deleteProductFromReceipt(productId, receiptId));
     }
 
 }

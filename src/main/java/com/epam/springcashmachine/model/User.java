@@ -16,10 +16,12 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
     @Enumerated(value = EnumType.STRING)
     private Role role;
-    @Column(nullable = false, unique = true)
+
     private String username;
+
     private String password;
 
 }

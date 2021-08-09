@@ -45,13 +45,13 @@ public interface ReceiptApi {
 
     @ApiOperation("Add product to receipt")
     @ResponseStatus(HttpStatus.OK)
-    @PatchMapping("/addProduct/{receiptId}")
+    @PatchMapping("/addProductToReceipt/{receiptId}")
     ReceiptModel addProductToReceipt(@PathVariable Long receiptId, @RequestBody ProductInReceiptDto productInReceiptDto);
 
     @ApiOperation("Delete product from receipt")
     @ResponseStatus(HttpStatus.OK)
-    @DeleteMapping("/deleteProduct")
-    ReceiptModel deleteProductFromReceipt(Integer productCode, ReceiptDto receiptDto);
+    @DeleteMapping("/deleteProductFromReceipt/{receiptId}/{productId}")
+    ReceiptModel deleteProductFromReceipt(@PathVariable Long receiptId, @PathVariable Long productId);
 
 
 }

@@ -19,5 +19,7 @@ public interface ReceiptService{
 
     ReceiptDto addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId);
 
+    ReceiptDto deleteProductFromReceipt(Long productId, Long receiptId);
+
 
 }

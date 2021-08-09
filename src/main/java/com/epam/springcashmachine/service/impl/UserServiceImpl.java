@@ -10,6 +10,7 @@ import com.epam.springcashmachine.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final MappingService mappingService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public UserDto getUser(String login) {
@@ -37,6 +39,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new UserAlreadyExistsException();
         }
+        userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
         User user = mappingService.mapUserDtoToUser(userDto);
         user = userRepository.save(user);
         log.info("createUser by login {}", userDto.getUsername());

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -96,6 +97,29 @@ public class ReceiptServiceImpl implements ReceiptService {
         productService.updateProduct(product.getName(),mappingService.mapProductToProductDto(product));
         log.info("to receipt with id {} added new products", persistedReceipt.getId());
         return updateReceipt(persistedReceipt.getId(), mappingService.mapReceiptToReceiptDro(persistedReceipt));
+    }
+
+    @Override
+    public ReceiptDto deleteProductFromReceipt(Long productId, Long receiptId) {
+        // TODO: solve problem with deleting product from receipt (current implementation doesn't work as expected)
+        Receipt persistedReceipt = receiptRepository.getById(receiptId);;
+        Product product = productRepository.getById(productId);
+        if (!persistedReceipt.getStatus().equals(Status.NEW)) {
+            log.info("Receipt is closed 4ever");
+            throw new ReceiptUpdateException();
+        }
+        if (!persistedReceipt.getProducts().containsKey(product)) {
+            log.info("Receipt doesn't contain this product");
+            throw new ReceiptUpdateException("Receipt doesn't contain this product");
+        }
+        product.setQuantity(product.getQuantity() + persistedReceipt.getProducts().get(product));
+        productService.updateProduct(product.getName(), mappingService.mapProductToProductDto(product));
+        log.info("product was returned");
+        persistedReceipt.getProducts().remove(product);
+        persistedReceipt.setTotal(countTotalForReceipt(persistedReceipt));
+        log.info("product successfully deleted from receipt");
+        persistedReceipt = receiptRepository.save(persistedReceipt);
+        return mappingService.mapReceiptToReceiptDro(persistedReceipt);
     }
 
     public Long countTotalForReceipt(Receipt receipt) {

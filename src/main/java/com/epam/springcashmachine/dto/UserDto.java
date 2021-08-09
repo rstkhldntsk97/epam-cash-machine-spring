@@ -19,7 +19,7 @@ public class UserDto {
 
     private Long id;
 
-    @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)
+//    @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)
     private Role role;
 
     @NotBlank(message = "'username' shouldn't be empty", groups = OnCreate.class)
