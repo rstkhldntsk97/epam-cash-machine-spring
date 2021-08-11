@@ -63,11 +63,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void deleteProduct(String name) {
-        log.info("deleteProduct by name {}" , name);
+        log.info("deleteProduct by name {}", name);
         Product product = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
         productRepository.delete(product);
     }
-
 
 
 }

@@ -134,4 +134,5 @@ public class UserServiceImplTest {
         assertThat(userService.getAll(), contains(mappingService.mapUserToUserDto(user)));
     }
 
+
 }

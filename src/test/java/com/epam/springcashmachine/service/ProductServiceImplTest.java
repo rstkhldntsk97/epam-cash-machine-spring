@@ -11,8 +11,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.List;
 import java.util.Optional;
+
 import static com.epam.springcashmachine.test.util.TestDataProductUtil.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -136,6 +138,5 @@ public class ProductServiceImplTest {
         when(repository.findAll()).thenReturn(List.of(product));
         assertThat(service.getAll(), contains(product));
     }
-
 
 }

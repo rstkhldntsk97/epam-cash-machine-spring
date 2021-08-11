@@ -163,6 +163,11 @@ public class ReceiptServiceImplTest {
     }
 
     @Test
+    void deleteProductFromReceipt(){
+
+    }
+
+    @Test
     void getAllTest() {
         Receipt receipt = TestDataReceiptUtil.createReceipt();
         when(repository.findAll()).thenReturn(List.of(receipt));
