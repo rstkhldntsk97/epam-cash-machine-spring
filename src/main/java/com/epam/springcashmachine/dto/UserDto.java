@@ -5,6 +5,8 @@ import com.epam.springcashmachine.dto.group.OnUpdate;
 import com.epam.springcashmachine.model.enums.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,11 +15,11 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Null;
 
 @Data
+@Builder
 @JsonInclude(Include.NON_NULL)
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDto {
-
-    private Long id;
 
 //    @NotBlank(message = "'user role' shouldn't be empty", groups = OnCreate.class)
     private Role role;

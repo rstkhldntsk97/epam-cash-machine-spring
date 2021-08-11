@@ -81,8 +81,8 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Transactional
     public ReceiptDto addProductToReceipt(ProductInReceiptDto productInReceiptDto,  Long receiptId) {
         Receipt persistedReceipt = receiptRepository.getById(receiptId);
-        Long productId = productInReceiptDto.getProductId();
-        Product product = productRepository.getById(productId);
+        Product product = productRepository.getById(productInReceiptDto.getProductId());
+
         if ( !persistedReceipt.getStatus().equals(Status.NEW)) {
             log.info("Receipt is closed 4ever");
             throw new ReceiptUpdateException();
@@ -91,6 +91,7 @@ public class ReceiptServiceImpl implements ReceiptService {
             log.info("product is already in receipt");
             throw new ReceiptUpdateException("product is already in receipt");
         }
+
         persistedReceipt.getProducts().put(product, productInReceiptDto.getAmount());
         persistedReceipt.setTotal(countTotalForReceipt(persistedReceipt));
         product.setQuantity(product.getQuantity() - productInReceiptDto.getAmount());
