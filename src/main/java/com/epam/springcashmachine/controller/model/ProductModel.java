@@ -1,6 +1,6 @@
 package com.epam.springcashmachine.controller.model;
 
-import com.epam.springcashmachine.dto.ProductDto;
+import com.epam.springcashmachine.model.Product;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,6 @@ import org.springframework.hateoas.RepresentationModel;
 public class ProductModel extends RepresentationModel<ProductModel> {
 
     @JsonUnwrapped
-    private ProductDto productDto;
+    private Product product;
 
 }

@@ -2,11 +2,11 @@ package com.epam.springcashmachine.exception;
 
 import com.epam.springcashmachine.model.enums.ErrorType;
 
-public class ProductNotFoundException extends ServiceException {
+public class ReceiptNotExistsException extends ServiceException{
 
-    private static final String DEFAULT_MESSAGE = "Product not found!";
+    private static final String DEFAULT_MESSAGE = "Receipt not exists";
 
-    public ProductNotFoundException() {
+    public ReceiptNotExistsException() {
         super(DEFAULT_MESSAGE);
     }
 

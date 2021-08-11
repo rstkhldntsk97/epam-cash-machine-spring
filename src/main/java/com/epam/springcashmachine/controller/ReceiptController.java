@@ -4,13 +4,10 @@ import com.epam.springcashmachine.api.ReceiptApi;
 import com.epam.springcashmachine.controller.assembler.ReceiptAssembler;
 import com.epam.springcashmachine.controller.model.ReceiptModel;
 import com.epam.springcashmachine.dto.ProductInReceiptDto;
-import com.epam.springcashmachine.dto.ReceiptDto;
-import com.epam.springcashmachine.service.ProductService;
+import com.epam.springcashmachine.model.Receipt;
 import com.epam.springcashmachine.service.ReceiptService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -29,13 +26,13 @@ public class ReceiptController implements ReceiptApi {
     }
 
     @Override
-    public ReceiptModel createReceipt(ReceiptDto receiptDto) {
+    public ReceiptModel createReceipt(Receipt receiptDto) {
         return receiptAssembler.toModel(receiptService.createReceipt(receiptDto));
     }
 
     @Override
-    public ReceiptModel updateReceipt(Long id, ReceiptDto receiptDto) {
-        ReceiptDto outReceiptDto = receiptService.updateReceipt(id, receiptDto);
+    public ReceiptModel updateReceipt(Long id, Receipt receiptDto) {
+        Receipt outReceiptDto = receiptService.updateReceipt(id, receiptDto);
         return receiptAssembler.toModel(outReceiptDto);
     }
 
@@ -47,9 +44,9 @@ public class ReceiptController implements ReceiptApi {
 
     @Override
     public List<ReceiptModel> getAllReceipts() {
-        List<ReceiptDto> outReceipts = receiptService.getAll();
+        List<Receipt> outReceipts = receiptService.getAll();
         List<ReceiptModel> receipts = new ArrayList<>();
-        for (ReceiptDto receipt : outReceipts) {
+        for (Receipt receipt : outReceipts) {
             receipts.add(receiptAssembler.toModel(receipt));
         }
         return receipts;

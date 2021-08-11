@@ -1,6 +1,5 @@
 package com.epam.springcashmachine.service.impl;
 
-import com.epam.springcashmachine.dto.ProductDto;
 import com.epam.springcashmachine.exception.ProductAlreadyExistsException;
 import com.epam.springcashmachine.exception.ProductNotFoundException;
 import com.epam.springcashmachine.model.Product;
@@ -11,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,52 +20,48 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final MappingService mappingService;
 
     @Override
-    public ProductDto createProduct(ProductDto productDto) {
-        if (productRepository.getProductByName(productDto.getName()).isPresent()) {
+    @Transactional
+    public Product createProduct(Product product) {
+        if (productRepository.getProductByName(product.getName()).isPresent()) {
             throw new ProductAlreadyExistsException();
         }
-        Product product = mappingService.mapProductDtoToProduct(productDto);
         product = productRepository.save(product);
-        return mappingService.mapProductToProductDto(product);
+        return product;
     }
 
     @Override
-    public ProductDto getProductByName(String name) {
+    @Transactional
+    public Product getProductByName(String name) {
         log.info("getProduct by name {}", name);
-        Product product = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
-        return mappingService.mapProductToProductDto(product);
+        return productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
-    public ProductDto getProductById(Long id) {
+    @Transactional
+    public Product getProductById(Long id) {
         log.info("getProduct by id {}", id);
-        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
-        return mappingService.mapProductToProductDto(product);
+        return productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
     }
 
     @Override
-    public List<ProductDto> getAll() {
-        List<ProductDto> products = new ArrayList<>();
-        List<Product> productsRep = productRepository.findAll();
-        for (Product p:productsRep) {
-            products.add(mappingService.mapProductToProductDto(p));
-        }
-        return products;
+    @Transactional
+    public List<Product> getAll() {
+        return productRepository.findAll();
     }
 
     @Override
-    public ProductDto updateProduct(String name, ProductDto productDto) {
+    @Transactional
+    public Product updateProduct(String name, Product product) {
         Product persistedProduct = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);
-        persistedProduct = mappingService.populateProductWithPresentProductDtoFields(persistedProduct, productDto);
-        Product storedProduct = productRepository.save(persistedProduct);
+        Product storedProduct = productRepository.save(product);
         log.info("quantity of product with name {} was successfully updated", storedProduct.getName());
-        return mappingService.mapProductToProductDto(persistedProduct);
+        return storedProduct;
     }
 
     @Override
+    @Transactional
     public void deleteProduct(String name) {
         log.info("deleteProduct by name {}" , name);
         Product product = productRepository.getProductByName(name).orElseThrow(ProductNotFoundException::new);

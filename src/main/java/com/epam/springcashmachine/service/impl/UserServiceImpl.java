@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public UserDto getUser(String login) {
         User user = userRepository.findByUsername(login).orElseThrow(UserNotFoundException::new);
         log.info("getUser by email {}", login);
@@ -33,8 +35,9 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @SneakyThrows
+
     @Override
+    @Transactional
     public UserDto createUser(UserDto userDto) {
         if (userRepository.existsByUsername(userDto.getUsername())) {
             throw new UserAlreadyExistsException();
@@ -47,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void deleteUser(String login) {
         User user = userRepository.findByUsername(login).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
@@ -54,6 +58,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(String username, UserDto userDto) {
         log.info("updateUser with username {}", username);
         User persistedUser = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
@@ -64,6 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public List<UserDto> getAll() {
         List<UserDto> users = new ArrayList<>();
         for (User user : userRepository.findAll()) {

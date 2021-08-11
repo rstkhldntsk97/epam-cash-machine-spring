@@ -1,6 +1,6 @@
 package com.epam.springcashmachine.controller.model;
 
-import com.epam.springcashmachine.dto.ReceiptDto;
+import com.epam.springcashmachine.model.Receipt;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,6 +13,6 @@ import org.springframework.hateoas.RepresentationModel;
 public class ReceiptModel extends RepresentationModel<ReceiptModel> {
 
     @JsonUnwrapped
-    private ReceiptDto receiptDto;
+    private Receipt receipt;
 
 }

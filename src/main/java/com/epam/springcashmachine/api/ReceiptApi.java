@@ -2,7 +2,7 @@ package com.epam.springcashmachine.api;
 
 import com.epam.springcashmachine.controller.model.ReceiptModel;
 import com.epam.springcashmachine.dto.ProductInReceiptDto;
-import com.epam.springcashmachine.dto.ReceiptDto;
+import com.epam.springcashmachine.model.Receipt;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -26,12 +26,12 @@ public interface ReceiptApi {
     @ApiOperation("Create receipt")
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createReceipt")
-    ReceiptModel createReceipt(@RequestBody ReceiptDto receiptDto);
+    ReceiptModel createReceipt(@RequestBody Receipt receipt);
 
     @ApiOperation("Update receipt")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/updateReceipt/{id}")
-    ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody ReceiptDto receiptDto);
+    ReceiptModel updateReceipt(@PathVariable Long id, @RequestBody Receipt receipt);
 
     @ApiOperation("Delete receipt")
     @ResponseStatus(HttpStatus.OK)

@@ -1,9 +1,8 @@
 package com.epam.springcashmachine.controller.assembler;
 
 import com.epam.springcashmachine.controller.ReceiptController;
-import com.epam.springcashmachine.controller.UserController;
 import com.epam.springcashmachine.controller.model.ReceiptModel;
-import com.epam.springcashmachine.dto.ReceiptDto;
+import com.epam.springcashmachine.model.Receipt;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
@@ -12,7 +11,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Component
-public class ReceiptAssembler extends RepresentationModelAssemblerSupport<ReceiptDto, ReceiptModel> {
+public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receipt, ReceiptModel> {
 
     public static final String GET_RECEIPT = "get_receipt";
     public static final String CREATE_RECEIPT = "create_receipt";
@@ -25,7 +24,7 @@ public class ReceiptAssembler extends RepresentationModelAssemblerSupport<Receip
     }
 
     @Override
-    public ReceiptModel toModel(ReceiptDto entity) {
+    public ReceiptModel toModel(Receipt entity) {
         ReceiptModel receiptModel = new ReceiptModel(entity);
 
         Link get = linkTo(methodOn(ReceiptController.class).getReceipt(entity.getId())).withRel(GET_RECEIPT);

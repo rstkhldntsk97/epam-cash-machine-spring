@@ -1,25 +1,25 @@
 package com.epam.springcashmachine.service;
 
 import com.epam.springcashmachine.dto.ProductInReceiptDto;
-import com.epam.springcashmachine.dto.ReceiptDto;
+import com.epam.springcashmachine.model.Receipt;
 
 import java.util.List;
 
 public interface ReceiptService{
 
-    ReceiptDto createReceipt(ReceiptDto receiptDto);
+    Receipt createReceipt(Receipt receipt);
 
-    ReceiptDto getById(Long id);
+    Receipt getById(Long id);
 
-    List<ReceiptDto> getAll();
+    List<Receipt> getAll();
 
-    ReceiptDto updateReceipt(Long id, ReceiptDto receiptDto);
+    Receipt updateReceipt(Long id, Receipt receipt);
 
     void deleteReceipt(Long id);
 
-    ReceiptDto addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId);
+    Receipt addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId);
 
-    ReceiptDto deleteProductFromReceipt(Long productId, Long receiptId);
+    Receipt deleteProductFromReceipt(Long productId, Long receiptId);
 
 
 }

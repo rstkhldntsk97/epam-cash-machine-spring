@@ -1,15 +1,13 @@
 package com.epam.springcashmachine.api;
 
 import com.epam.springcashmachine.controller.model.ProductModel;
-import com.epam.springcashmachine.dto.ProductDto;
-import com.epam.springcashmachine.dto.group.OnCreate;
+import com.epam.springcashmachine.model.Product;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -35,13 +33,13 @@ public interface ProductApi {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/createProduct")
 //    ProductModel createProduct(@Validated(OnCreate.class) @RequestBody ProductDto productDto);
-    ProductModel createProduct(@RequestBody ProductDto productDto);
+    ProductModel createProduct(@RequestBody Product product);
 
 
     @ApiOperation("Update product")
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/updateProduct/{name}")
-    ProductModel updateProduct(@PathVariable String name, @RequestBody @Valid ProductDto productDto);
+    ProductModel updateProduct(@PathVariable String name, @RequestBody @Valid Product product);
 
     @ApiOperation("Delete product")
     @ResponseStatus(HttpStatus.ACCEPTED)

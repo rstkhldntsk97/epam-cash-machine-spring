@@ -1,20 +1,20 @@
 package com.epam.springcashmachine.service;
 
-import com.epam.springcashmachine.dto.ProductDto;
+import com.epam.springcashmachine.model.Product;
 
 import java.util.List;
 
 public interface ProductService {
 
-    ProductDto createProduct(ProductDto productDto);
+    Product createProduct(Product product);
 
-    ProductDto getProductByName(String name);
+    Product getProductByName(String name);
 
-    ProductDto getProductById(Long id);
+    Product getProductById(Long id);
 
-    List<ProductDto> getAll();
+    List<Product> getAll();
 
-    ProductDto updateProduct(String name, ProductDto productDto);
+    Product updateProduct(String name, Product product);
 
     void deleteProduct(String name);
 
