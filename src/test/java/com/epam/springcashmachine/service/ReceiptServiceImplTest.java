@@ -1,18 +1,14 @@
 package com.epam.springcashmachine.service;
 
 import com.epam.springcashmachine.dto.ProductInReceiptDto;
-import com.epam.springcashmachine.exception.ProductNotFoundException;
 import com.epam.springcashmachine.exception.ReceiptNotExistsException;
+import com.epam.springcashmachine.exception.ReceiptUpdateException;
 import com.epam.springcashmachine.model.Product;
 import com.epam.springcashmachine.model.Receipt;
-import com.epam.springcashmachine.repository.ProductRepository;
+import com.epam.springcashmachine.model.enums.Status;
 import com.epam.springcashmachine.repository.ReceiptRepository;
-import com.epam.springcashmachine.service.impl.MappingServiceImpl;
-import com.epam.springcashmachine.service.impl.ProductServiceImpl;
 import com.epam.springcashmachine.service.impl.ReceiptServiceImpl;
-import com.epam.springcashmachine.test.util.TestDataProductUtil;
 import com.epam.springcashmachine.test.util.TestDataReceiptUtil;
-import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,12 +20,10 @@ import java.util.Optional;
 
 import static com.epam.springcashmachine.test.util.TestDataReceiptUtil.*;
 import static org.mockito.Mockito.when;
-import static com.epam.springcashmachine.test.util.TestDataProductUtil.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class ReceiptServiceImplTest {
@@ -121,31 +115,52 @@ public class ReceiptServiceImplTest {
         assertThrows(ReceiptNotExistsException.class, () -> service.deleteReceipt(RECEIPT_ID));
     }
 
-//    @Test
-//    void addProductToReceiptTest(){
-//        Receipt receiptBefore = TestDataReceiptUtil.createReceipt();
-//        Receipt receiptAfter = TestDataReceiptUtil.createAnotherReceipt();
-//        ProductInReceiptDto productInReceiptDto = TestDataReceiptUtil.createProductInReceiptDto();
-//        Product productBeforeUpdate = TestDataReceiptUtil.product;
-//        Product productAfterUpdate = TestDataReceiptUtil.product2;
-//
-//        when(repository.findById(receiptBefore.getId())).thenReturn(Optional.of(receiptBefore));
-//
-//        when(productService.getProductById(productInReceiptDto.getProductId())).thenReturn(productBeforeUpdate);
-//
-//        when(service.updateReceipt(receiptBefore.getId(), receiptBefore)).thenReturn(receiptAfter);
-//        when(productService.updateProduct(product.getName(), product)).thenReturn(productAfterUpdate);
-//
-//        Receipt candidateReceipt = service.addProductToReceipt(productInReceiptDto, receiptBefore.getId());
-//
-//        assertThat(candidateReceipt, allOf(
-////                hasProperty("id", equalTo(createAnotherReceipt().getId())),
-//                hasProperty("total", equalTo(receiptAfter.getTotal())),
-//                hasProperty("user", equalTo(receiptAfter.getUser())),
-//                hasProperty("status", equalTo(receiptAfter.getStatus())),
-//                hasProperty("products", equalTo(receiptAfter.getProducts()))
-//        ));
-//    }
+    @Test
+    void addProductToReceiptTest() {
+        Receipt receiptBefore = TestDataReceiptUtil.createReceipt();
+        Receipt receiptAfter = TestDataReceiptUtil.createAnotherReceipt();
+        ProductInReceiptDto productInReceiptDto = TestDataReceiptUtil.createProductInReceiptDto();
+        Product addedProduct = TestDataReceiptUtil.product2;
+
+        when(repository.findById(receiptBefore.getId())).thenReturn(Optional.of(receiptBefore));
+        when(productService.getProductById(productInReceiptDto.getProductId())).thenReturn(addedProduct);
+        when(service.updateReceipt(receiptBefore.getId(), receiptBefore)).thenReturn(receiptAfter);
+
+        Receipt candidateReceipt = service.addProductToReceipt(productInReceiptDto, receiptBefore.getId());
+
+        assertThat(candidateReceipt, allOf(
+                hasProperty("id", equalTo(receiptAfter.getId())),
+                hasProperty("total", equalTo(receiptAfter.getTotal())),
+                hasProperty("user", equalTo(receiptAfter.getUser())),
+                hasProperty("status", equalTo(receiptAfter.getStatus())),
+                hasProperty("products", equalTo(receiptAfter.getProducts()))
+        ));
+    }
+
+    @Test
+    void addProductToReceiptReceiptUpdateExceptionReceiptIsArchivedTest() {
+        Receipt receiptBefore = TestDataReceiptUtil.createReceipt();
+        receiptBefore.setStatus(Status.ARCHIVED);
+        ProductInReceiptDto productInReceiptDto = TestDataReceiptUtil.createProductInReceiptDto();
+        Product addedProduct = TestDataReceiptUtil.product;
+
+        when(repository.findById(receiptBefore.getId())).thenReturn(Optional.of(receiptBefore));
+        when(productService.getProductById(productInReceiptDto.getProductId())).thenReturn(addedProduct);
+
+        assertThrows(ReceiptUpdateException.class, () -> service.addProductToReceipt(productInReceiptDto, receiptBefore.getId()));
+    }
+
+    @Test
+    void addProductToReceiptReceiptUpdateExceptionAlreadyInReceiptTest() {
+        Receipt receiptBefore = TestDataReceiptUtil.createReceipt();
+        ProductInReceiptDto productInReceiptDto = TestDataReceiptUtil.createProductInReceiptDto();
+        Product addedProduct = TestDataReceiptUtil.product;
+
+        when(repository.findById(receiptBefore.getId())).thenReturn(Optional.of(receiptBefore));
+        when(productService.getProductById(productInReceiptDto.getProductId())).thenReturn(addedProduct);
+
+        assertThrows(ReceiptUpdateException.class, () -> service.addProductToReceipt(productInReceiptDto, receiptBefore.getId()));
+    }
 
     @Test
     void getAllTest() {
