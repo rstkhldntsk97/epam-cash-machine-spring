@@ -40,12 +40,6 @@ public class ReceiptServiceImpl implements ReceiptService {
 
     @Override
     @Transactional
-    public List<Receipt> getAll() {
-        return receiptRepository.findAll();
-    }
-
-    @Override
-    @Transactional
     public Receipt updateReceipt(Long id, Receipt receipt) {
         Receipt updatedReceipt = null;
         if (receiptRepository.findById(id).isPresent()) {
@@ -58,7 +52,7 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     @Transactional
     public void deleteReceipt(Long id) {
-        Receipt receipt = receiptRepository.getById(id);
+        Receipt receipt = receiptRepository.findById(id).orElseThrow(ReceiptNotExistsException::new);
         receipt.setStatus(Status.valueOf("ARCHIVED"));
         receiptRepository.save(receipt);
     }
@@ -74,10 +68,10 @@ public class ReceiptServiceImpl implements ReceiptService {
     @Override
     @Transactional
     public Receipt addProductToReceipt(ProductInReceiptDto productInReceiptDto, Long receiptId) {
-        Receipt persistedReceipt = receiptRepository.getById(receiptId);
+        Receipt persistedReceipt = receiptRepository.findById(receiptId).orElseThrow(ReceiptNotExistsException::new);
         Product product = productService.getProductById(productInReceiptDto.getProductId());
 
-        if (!persistedReceipt.getStatus().equals(Status.NEW)) {
+        if (!persistedReceipt.getStatus().equals(Status.CLOSED)) {
             log.info("Receipt is closed 4ever");
             throw new ReceiptUpdateException();
         }
@@ -117,6 +111,12 @@ public class ReceiptServiceImpl implements ReceiptService {
 //        persistedReceipt = receiptRepository.save(persistedReceipt);
 //        return mappingService.mapReceiptToReceiptDro(persistedReceipt);
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    @Transactional
+    public List<Receipt> getAll() {
+        return receiptRepository.findAll();
     }
 
     public Long countTotalForReceipt(Receipt receipt) {
