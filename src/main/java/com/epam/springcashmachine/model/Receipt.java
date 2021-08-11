@@ -18,6 +18,7 @@ public class Receipt {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(nullable = false)
     private Long total;
 
     @ManyToOne
@@ -25,6 +26,7 @@ public class Receipt {
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Status status;
 
     @ElementCollection

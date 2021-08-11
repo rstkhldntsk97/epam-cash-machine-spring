@@ -12,8 +12,6 @@ public interface UserService {
 
     List<UserDto> getAll();
 
-    UserDto login(String username, String password);
-
     void deleteUser(String username);
 
     UserDto updateUser(String username, UserDto userDto);

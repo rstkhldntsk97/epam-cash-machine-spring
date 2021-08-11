@@ -54,12 +54,5 @@ public class UserController implements UserApi {
         }
         return users;
     }
-//    @Override
-
-    @ResponseStatus(HttpStatus.OK)
-    @PostMapping("/login")
-    public UserDto login(String username, String password) {
-        return userService.login(username, password);
-    }
 
 }

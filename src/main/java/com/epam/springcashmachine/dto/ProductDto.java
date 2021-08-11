@@ -3,12 +3,18 @@ package com.epam.springcashmachine.dto;
 import com.epam.springcashmachine.dto.group.OnCreate;
 import com.epam.springcashmachine.dto.group.OnUpdate;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 
 @Data
+@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
 
     private Long id;

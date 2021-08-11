@@ -47,26 +47,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDto> getAll() {
-        List<UserDto> users = new ArrayList<>();
-        for (User user : userRepository.findAll()) {
-            users.add(mappingService.mapUserToUserDto(user));
-        }
-        log.info("getAll users");
-        return users;
-    }
-
-    @Override
-    public UserDto login(String username, String password) {
-        User user = userRepository.findByUsername(username).orElseThrow(UserNotFoundException::new);
-        if (user.getPassword().equals(password)) {
-            log.info("user with username {} was successfully logged in", username);
-            return mappingService.mapUserToUserDto(user);
-        }
-        throw new RuntimeException("cannot find user");
-    }
-
-    @Override
     public void deleteUser(String login) {
         User user = userRepository.findByUsername(login).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
@@ -81,6 +61,16 @@ public class UserServiceImpl implements UserService {
         User storedUser = userRepository.save(persistedUser);
         log.info("User with username {} username was successfully updated", storedUser.getUsername());
         return mappingService.mapUserToUserDto(persistedUser);
+    }
+
+    @Override
+    public List<UserDto> getAll() {
+        List<UserDto> users = new ArrayList<>();
+        for (User user : userRepository.findAll()) {
+            users.add(mappingService.mapUserToUserDto(user));
+        }
+        log.info("getAll users");
+        return users;
     }
 
 }

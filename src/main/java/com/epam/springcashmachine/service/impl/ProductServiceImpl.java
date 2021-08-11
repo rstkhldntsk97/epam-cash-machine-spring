@@ -1,6 +1,7 @@
 package com.epam.springcashmachine.service.impl;
 
 import com.epam.springcashmachine.dto.ProductDto;
+import com.epam.springcashmachine.exception.ProductAlreadyExistsException;
 import com.epam.springcashmachine.exception.ProductNotFoundException;
 import com.epam.springcashmachine.model.Product;
 import com.epam.springcashmachine.repository.ProductRepository;
@@ -23,6 +24,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
+        if (productRepository.getProductByName(productDto.getName()).isPresent()) {
+            throw new ProductAlreadyExistsException();
+        }
         Product product = mappingService.mapProductDtoToProduct(productDto);
         product = productRepository.save(product);
         return mappingService.mapProductToProductDto(product);
@@ -38,7 +42,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProductById(Long id) {
         log.info("getProduct by id {}", id);
-        Product product = productRepository.getById(id);
+        Product product = productRepository.findById(id).orElseThrow(ProductNotFoundException::new);
         return mappingService.mapProductToProductDto(product);
     }
 
